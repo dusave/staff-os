@@ -1,95 +1,40 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import { MemberList } from "@/components/member-list";
+import { Suspense } from "react";
+import Loading from "./loading";
+import { Member } from "@/data/members";
 
-export default function Home() {
+async function getData(): Promise<Member[]> {
+  console.log('ENDPOINT', process.env.MEMBER_API_ENDPOINT);
+  const apiEndpoint = process.env.MEMBER_API_ENDPOINT
+
+  if(apiEndpoint) {
+    const data = await fetch(apiEndpoint)
+    const json = await data.json()
+    return Object.entries<Member>(json.users).map(([key, value]) => {
+      return {
+        id: key,
+        first: value.first,
+        last: value.last,
+        role: value.role,
+        photo: value.photo
+      }
+    })
+  } else {
+    console.error('API endpoint not specified')
+    return []
+  }
+}
+ 
+export default async function Page() {
+  const members = await getData()
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    <section>
+      <h1>Members</h1>
+      <p>Manage your staff with ease</p>
+      <Suspense fallback={<Loading/>}>
+        <MemberList members={members} />
+      </Suspense>
+    </section>
   );
 }
