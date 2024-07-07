@@ -9,7 +9,6 @@ export type Member = {
 }
 
 export async function fetchMembers() {
-  console.log('ENDPOINT', process.env.MEMBER_API_ENDPOINT);
   const apiEndpoint = process.env.MEMBER_API_ENDPOINT
 
   if(apiEndpoint) {

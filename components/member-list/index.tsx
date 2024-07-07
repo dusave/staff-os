@@ -1,7 +1,8 @@
 'use client';
 
 import { Member } from "@/data/members";
-import Image from "next/image";
+import { MemberComponent } from "../member";
+import styles from './member-list.module.css'
 
 interface MemberListProps {
   members: Member[]
@@ -13,14 +14,10 @@ export const MemberList = ({members}: MemberListProps) => {
   }
 
   return (
-    <>
-    {members.map((member:any) => (
-      <div key={member.id}>
-        <Image src={member.photo} alt={member.first} width={200} height={200} />
-        <h2>{member.first} {member.last}</h2>
-        <p>{member.role}</p>
-      </div>  
+    <div className={styles.memberListContainer}>
+    {members.map((member) => (
+      <MemberComponent member={member} key={member.id}/>
     ))}
-    </>
+    </div>
   ) 
 }
