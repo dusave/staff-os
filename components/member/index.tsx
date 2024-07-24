@@ -1,6 +1,6 @@
 import { Member } from '@/data/members'
 import Image from 'next/image'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import styles from './member.module.css'
 import { Box, Checkbox } from '@radix-ui/themes'
 
@@ -22,7 +22,7 @@ export const MemberComponent = ({member, onMemberChange}: MemberProps) => {
       </div>
       <Image className={styles.avatar} src={member.photo} alt={member.first} width={200} height={200} />
       <Box className={styles.nameplate}>
-        <h2>{member.first} {member.last}</h2>
+        <h4>{member.first} {member.last}</h4>
         <p>{member.role}</p>
       </Box>
     </div>  

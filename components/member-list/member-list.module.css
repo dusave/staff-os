@@ -13,3 +13,9 @@
     justify-content: flex-start;
     gap: 0;
 }
+
+.columns {
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0;
+}

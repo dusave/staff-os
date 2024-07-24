@@ -1,17 +1,13 @@
 'use client';
 
-import { Member } from "@/data/members";
 import { MemberComponent } from "../member";
 import styles from './member-list.module.css'
-import { Box } from "@radix-ui/themes";
+import { Box, Tabs } from "@radix-ui/themes";
 import { useMemberContext } from "../member-context";
+import { usePathname } from "next/navigation";
 
-interface MemberListProps {
-  isGrouped?: boolean
-}
-
-export const MemberList = ({isGrouped = false}: MemberListProps) => {
-
+export const MemberList = () => {
+  const pathname = usePathname()
   const { members, updateMember, error } = useMemberContext()
 
   if(error) {
@@ -33,39 +29,57 @@ export const MemberList = ({isGrouped = false}: MemberListProps) => {
     )
   }
 
-  if(isGrouped) {
-    const admins = members.filter(m => m.isAdmin)
+  const admins = members.filter(m => m.isAdmin)
+  const plebs = members.filter(m => !m.isAdmin)
 
-    const plebs = members.filter(m => !m.isAdmin)
-    return (
-      <>
-        {admins.length > 0 && (
-          <Box className={[styles.memberListContainer, styles.columns].join(' ')}>
-            <h2>Admin Users</h2>
-            {admins.map((member) => (
-              <MemberComponent member={member} key={member.id} onMemberChange={updateMember}/>
-            ))}
-          </Box>
-        )}
+  const selectedTab = pathname === '/groups' ? 'groups' : 'members'
 
-        {plebs.length > 0 && (
-          
-          <Box className={[styles.memberListContainer, styles.columns].join(' ')}>
-            <h2>Standard Users</h2>
-            {plebs.map((member) => (
-              <MemberComponent member={member} key={member.id} onMemberChange={updateMember}/>
-            ))}
-          </Box>
-        )}
-      </>
-    )
+  const onTabChange = (value: string) => {
+    if(value === 'members') {
+      history.pushState({}, 'Members', '/members')
+    } else {
+      history.pushState({}, 'Groups', '/groups')
+    }
   }
 
-  return (
-    <Box className={[styles.memberListContainer, styles.rows].join(' ')}>
-    {members.map((member) => (
-      <MemberComponent member={member} key={member.id} onMemberChange={updateMember}/>
-    ))}
-    </Box>
-  ) 
+  return (<section className="container">
+    <Tabs.Root defaultValue={selectedTab}>
+      <Tabs.List>
+        <Tabs.Trigger value="members" onClick={() => onTabChange('members')}>Members</Tabs.Trigger>
+        <Tabs.Trigger value="groups" onClick={() => onTabChange('groups')}>Groups</Tabs.Trigger>
+      </Tabs.List>
+
+      <Box pt="3">
+        <Tabs.Content value="members">
+          <h1 className={styles.groupHeader}>Members</h1>
+          <Box className={[styles.memberListContainer, styles.rows].join(' ')}>
+            {members.map((member) => (
+              <MemberComponent member={member} key={member.id} onMemberChange={updateMember}/>
+            ))}
+            </Box>
+        </Tabs.Content>
+        <Tabs.Content value="groups">
+          <h1 className={styles.groupHeader}>Groups</h1>
+          {admins.length > 0 && (
+            <Box className={[styles.memberListContainer, styles.columns].join(' ')}>
+              <h2>Admin Users</h2>
+              {admins.map((member) => (
+                <MemberComponent member={member} key={member.id} onMemberChange={updateMember}/>
+              ))}
+            </Box>
+          )}
+
+          {plebs.length > 0 && (
+            <Box className={[styles.memberListContainer, styles.columns].join(' ')}>
+              <h2>Standard Users</h2>
+              {plebs.map((member) => (
+                <MemberComponent member={member} key={member.id} onMemberChange={updateMember}/>
+              ))}
+            </Box>
+          )}
+        </Tabs.Content>
+      </Box>
+    </Tabs.Root>
+  </section>
+  )
 }

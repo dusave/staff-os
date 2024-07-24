@@ -10,6 +10,7 @@ import "./globals.css";
 import "./fonts/fontawesome.min.css";
 import { Suspense } from "react";
 import Loading from "../components/loading";
+import Link from "next/link";
 
 // Configure dotenv variables
 require('dotenv').config()
@@ -47,7 +48,7 @@ export default function RootLayout({
           <Theme accentColor="purple" grayColor="slate">
             <Header />
             <Suspense fallback={<Loading/>}>
-            {children}
+              {children}
             </Suspense>
           </Theme>
         </ThemeProvider>
