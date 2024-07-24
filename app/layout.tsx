@@ -8,6 +8,8 @@ import { ThemeProvider } from "next-themes";
 
 import "./globals.css";
 import "./fonts/fontawesome.min.css";
+import { Suspense } from "react";
+import Loading from "../components/loading";
 
 // Configure dotenv variables
 require('dotenv').config()
@@ -44,7 +46,9 @@ export default function RootLayout({
         <ThemeProvider attribute="class">
           <Theme accentColor="purple" grayColor="slate">
             <Header />
+            <Suspense fallback={<Loading/>}>
             {children}
+            </Suspense>
           </Theme>
         </ThemeProvider>
       </body>

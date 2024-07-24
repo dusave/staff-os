@@ -6,6 +6,7 @@ export type Member = {
   last: string
   role: string
   photo: string
+  isAdmin: boolean
 }
 
 export async function fetchMembers() {
@@ -13,8 +14,9 @@ export async function fetchMembers() {
 
   if(apiEndpoint) {
     const data = await fetch(apiEndpoint)
-
-    return await data.json()
+    return setTimeout(() => {
+      return data.json()
+    }, 4000)
   } else {
     console.error('API endpoint not specified')
     return {}
