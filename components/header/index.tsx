@@ -2,7 +2,6 @@
 
 import { usePathname } from "next/navigation";
 import styles from "./header.module.css";
-import { Heading, Text } from "@radix-ui/themes";
 import { capitalize } from "@/utils";
 
 export const Header = () => {
@@ -13,9 +12,9 @@ export const Header = () => {
 
   return (
     <header className={styles.header}>
-      <Heading as="h1" size='7'>staffOS</Heading>
-      <Text>/</Text>
-      <Heading as="h2" size='5'>{capitalize(segment)}</Heading>
+      <h1>staffOS</h1>
+      <span>/</span>
+      <h2>{capitalize(segment)}</h2>
     </header>
   );
 }

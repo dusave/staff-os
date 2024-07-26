@@ -1,10 +1,10 @@
 'use client';
 
-import { MemberComponent } from "../member";
-import styles from './member-list.module.css'
+import { MemberComponent } from "../member-row";
 import { Box, Tabs } from "@radix-ui/themes";
 import { useMemberContext } from "../member-context";
 import { usePathname } from "next/navigation";
+import styles from './member-list.module.css'
 
 export const MemberList = () => {
   const pathname = usePathname()

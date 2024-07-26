@@ -1,8 +1,9 @@
 import { Member } from '@/data/members'
 import Image from 'next/image'
 import React, { useCallback } from 'react'
-import styles from './member.module.css'
+import styles from './member-row.module.css'
 import { Box, Checkbox } from '@radix-ui/themes'
+import { fontAwesome } from '@/app/fonts/fonts'
 
 interface MemberProps {
   member: Member
@@ -18,7 +19,7 @@ export const MemberComponent = ({member, onMemberChange}: MemberProps) => {
     <div className={[styles.memberContainer, styles.row].join(' ')}>
       <Checkbox onCheckedChange={toggleAdmin} checked={member.isAdmin}/>
       <div className={[styles.standard, member.isAdmin ? styles.admin : ''].join(' ') }>
-        <i className="fa-solid fa-user-crown fa-2x" />
+        <span className={`solid fa-user-crown fa-2x ${fontAwesome.className}`} />
       </div>
       <Image className={styles.avatar} src={member.photo} alt={member.first} width={200} height={200} />
       <Box className={styles.nameplate}>

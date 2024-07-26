@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import localFont from 'next/font/local'
-import { Quicksand } from "next/font/google";
 import '@radix-ui/themes/styles.css';
-import { Theme } from "@radix-ui/themes";
+import { Box, Theme } from "@radix-ui/themes";
 import { Header } from "@/components/header";
 import { ThemeProvider } from "next-themes";
 
@@ -10,26 +8,10 @@ import "./globals.css";
 import "./fonts/fontawesome.min.css";
 import { Suspense } from "react";
 import Loading from "../components/loading";
-import Link from "next/link";
+import { fontAwesome, quicksand } from "./fonts/fonts";
 
 // Configure dotenv variables
 require('dotenv').config()
-
-const quicksand = Quicksand({ subsets: ["latin"] });
-const fontAwesome = localFont({
-  src: [
-    {
-      path: './fonts/fa-regular-400.woff2',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: './fonts/fa-solid-900.woff2',
-      weight: '900',
-      style: 'normal',
-    },
-  ],
-})
 
 export const metadata: Metadata = {
   title: "staffOS",
@@ -42,14 +24,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={[quicksand.className, fontAwesome.className].join(' ')}>
+    <html lang="en" className={`${quicksand.variable} ${fontAwesome.variable}`}>
+      <body>
         <ThemeProvider attribute="class">
           <Theme accentColor="purple" grayColor="slate">
-            <Header />
-            <Suspense fallback={<Loading/>}>
-              {children}
-            </Suspense>
+            <Box className="app-shell">
+              <Header />
+              <Suspense fallback={<Loading/>}>
+                {children}
+              </Suspense>
+            </Box>
           </Theme>
         </ThemeProvider>
       </body>
